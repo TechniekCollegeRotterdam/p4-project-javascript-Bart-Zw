@@ -18,7 +18,7 @@ class Player{
          this.rotation = 0
 
         //speler onder in het schrem te krijgen
-        const image = new image()
+        const image = new Image()
         image.src = './img/spaceship.png'
         image.onload = () => {
             const scale = 0.15
@@ -71,7 +71,7 @@ class Player{
     }
 }
 
-const player = new player()
+const player = new Player()
 const keys = {
     a: {
         pressed: false
