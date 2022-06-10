@@ -8,7 +8,12 @@ canvas.height = innerHeight
 //speler aan maken
 class Player{
     constructor() {
-       
+
+      this.position = {
+        x: 200,
+        y: 100
+      }
+      
          
         this.velocity = {
             x: 0,
@@ -86,6 +91,7 @@ const keys = {
 
 function animate() {
     requestAnimationFrame(animate)
+    player.draw();
     c.fillStyle = 'black'
     c.fillRect(0, 0, canvas.width, canvas.height)
     player.update()
