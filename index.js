@@ -10,6 +10,10 @@ class Player {
       x: 0,
       y: 0,
     };
+
+    this.rotation = 0 
+
+
     const image = new Image();
     image.src = "./img/spaceship.png";
     image.onload = () => {
@@ -25,6 +29,21 @@ class Player {
   }
 
   draw() {
+
+    c.save()
+    c.translate(
+    player.position.x + player.width / 2, 
+    player.position.y + player.height / 2
+    );
+
+    c.rotate(this.rotation)
+
+    c.translate(
+    -player.position.x - player.width / 2, 
+    -player.position.y - player.height / 2
+    );
+
+
     c.drawImage(
       this.image,
       this.position.x,
@@ -32,6 +51,7 @@ class Player {
       this.width,
       this.height
     );
+    c.restore()
   }
 
   update() {
@@ -61,6 +81,17 @@ function animate() {
   c.fillRect(0, 0, canvas.width, canvas.height);
   player.update();
   // als je op A druk dan ga je naar links
+  if (keys.a.pressed && player.position.x >= 0) {
+    player.velocity.x = -7;
+    player.rotation = -0.15
+    // als je op D druk dan ga je naar rechts
+  } else if (keys.d.pressed && player.position.x +player.width <= canvas.width) {
+    player.velocity.x = 7
+    player.rotation = 0.15
+  } else {
+    player.velocity.x = 0;
+    player.rotation = 0
+
   if (keys.a.pressed) {
     player.velocity.x = -5;
     // als je op D druk dan ga je naar rechts
@@ -96,4 +127,6 @@ addEventListener("keyup", ({ key }) => {
     case " ":
       break;
   }
+});
+
 });
