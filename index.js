@@ -179,7 +179,7 @@ class Grid {
 
 const player = new Player();
 const Projectiles = []
-const grids = [new Grid()]
+const grids = []
 
 const keys = {
   a: {
@@ -192,6 +192,11 @@ const keys = {
     pressed: false,
   },
 };
+
+let frames = 0
+let randomInterval = Math.floor(Math.random() * 500 + 500)
+
+
 
 function animate() {
   requestAnimationFrame(animate);
@@ -216,6 +221,7 @@ function animate() {
     grid.update()
     grid.invaders.forEach(invader => {
       invader.update({velocity: grid.velocity})
+
     })
   })
 
@@ -231,6 +237,16 @@ function animate() {
     player.velocity.x = 0;
     player.rotation = 0
   }
+  
+  //spwans de invaders in
+  if (frames % randomInterval === 0) {
+    grids.push(new Grid())
+    randomInterval = Math.floor(Math.random() * 500 + 500)
+    frames = 0 
+  }
+
+  frames++
+
 }
 animate();
 
