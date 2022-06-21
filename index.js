@@ -4,6 +4,7 @@ const c = canvas.getContext("2d");
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
+//begin class speler
 class Player {
   constructor() {
     this.velocity = {
@@ -11,7 +12,7 @@ class Player {
       y: 0,
     };
 
-    this.rotation = 0 
+    this.rotation = 0
     const image = new Image();
     image.src = "./img/spaceship.png";
     image.onload = () => {
@@ -30,17 +31,17 @@ class Player {
 
     c.save()
     c.translate(
-    player.position.x + player.width / 2, 
-    player.position.y + player.height / 2
+      player.position.x + player.width / 2,
+      player.position.y + player.height / 2
     );
 
     c.rotate(this.rotation)
 
     c.translate(
-    -player.position.x - player.width / 2, 
-    -player.position.y - player.height / 2
+      -player.position.x - player.width / 2,
+      -player.position.y - player.height / 2
     );
-    
+
     c.drawImage(
       this.image,
       this.position.x,
@@ -58,35 +59,40 @@ class Player {
     }
   }
 }
-
-class Projectile{
-  constructor({position, velocity}){
+//begin class Projectile
+class Projectile {
+  constructor({
+    position,
+    velocity
+  }) {
     this.position = position
     this.velocity = velocity
 
     this.radius = 4
-   }
+  }
 
-draw() {
-  c.beginPath()
-  c.arc(this.position.x, this.position.y, this.radius, 0,
-    Math.PI * 2)
+  draw() {
+    c.beginPath()
+    c.arc(this.position.x, this.position.y, this.radius, 0,
+      Math.PI * 2)
 
     c.fillStyle = 'red'
     c.fill()
     c.closePath()
-   }
+  }
 
-   update() {
+  update() {
     this.draw()
     this.position.x += this.velocity.x
     this.position.y += this.velocity.y
 
-   }
+  }
 }
- 
+
 class Invader {
-  constructor({ position }) {
+  constructor({
+    position
+  }) {
     this.velocity = {
       x: 0,
       y: 0,
@@ -109,8 +115,8 @@ class Invader {
 
   draw() {
 
-    
-    
+
+
     c.drawImage(
       this.image,
       this.position.x,
@@ -121,7 +127,9 @@ class Invader {
     c.restore()
   }
 
-  update({velocity}) {
+  update({
+    velocity
+  }) {
     if (this.image) {
       this.draw();
       this.position.x += velocity.x;
@@ -131,6 +139,7 @@ class Invader {
   }
 }
 
+//begin class Grid
 class Grid {
   constructor() {
     this.position = {
@@ -140,28 +149,31 @@ class Grid {
 
     this.velocity = {
       x: 3,
-      y:0
+      y: 0
     }
 
     this.invaders = []
 
     const columns = Math.floor(Math.random() * 10 + 5)
     const rows = Math.floor(Math.random() * 5 + 2)
-     
-     this.width = columns * 30
+
+    this.width = columns * 30
 
     for (let x = 0; x < columns; x++) {
-     for (let y = 0; y < rows; y++) {
+      for (let y = 0; y < rows; y++) {
 
-      this.invaders.push(new Invader({position: {
-        x: x * 30,
-        y: y * 30
+        this.invaders.push(new Invader({
+          position: {
+            x: x * 30,
+            y: y * 30
 
-      }}))
+          }
+        }))
+      }
+
+
     }
-
-
-  }}
+  }
 
   update() {
     this.position.x += this.velocity.x
@@ -169,8 +181,7 @@ class Grid {
 
     this.velocity.y = 0
 
-    if (this.position.x +this.width >= canvas.width || this.
-      position.x <= 0) {
+    if (this.position.x + this.width >= canvas.width || this.position.x <= 0) {
       this.velocity.x = -this.velocity.x
       this.velocity.y = 30
     }
@@ -205,8 +216,8 @@ function animate() {
   player.update();
   Projectiles.forEach((Projectile, index) => {
 
-    if (Projectile.position.y + Projectile.radius <= 0){
-      setTimeout(() =>{
+    if (Projectile.position.y + Projectile.radius <= 0) {
+      setTimeout(() => {
         Projectiles.splice(index, 1)
 
       })
@@ -219,43 +230,43 @@ function animate() {
 
   grids.forEach((grid, gridIndex) => {
     grid.update()
-    grid.invaders.forEach((invader, i)  => {
-      invader.update({velocity: grid.velocity})
-      
-      Projectiles.forEach((Projectile,j) => {
-        if (Projectile.position.y - Projectile.radius <= 
-         invader.position.y + invader.height &&
-         Projectile.position.x + Projectile.radius >=
-         invader.position.x && Projectile.position.x -
-         Projectile.radius <= invader.position.x + invader.width && 
-         Projectile.position.y + Projectile.radius >= invader.position.y
-          ) {
-          
+    grid.invaders.forEach((invader, i) => {
+      invader.update({
+        velocity: grid.velocity
+      })
+
+      Projectiles.forEach((Projectile, j) => {
+        if (Projectile.position.y - Projectile.radius <=
+          invader.position.y + invader.height &&
+          Projectile.position.x + Projectile.radius >=
+          invader.position.x && Projectile.position.x -
+          Projectile.radius <= invader.position.x + invader.width &&
+          Projectile.position.y + Projectile.radius >= invader.position.y
+        ) {
+
           setTimeout(() => {
-            const invaderFound = grid.invaders.find((invader2
-            )=>  invader2 === invader )
-              const ProjectileFound = Projectiles.find(
-                (Projectile2) => Projectile2 === Projectile)
+            const invaderFound = grid.invaders.find((invader2) => invader2 === invader)
+            const ProjectileFound = Projectiles.find(
+              (Projectile2) => Projectile2 === Projectile)
 
-              //weg halen invader en projectitle
-              if(invaderFound && ProjectileFound) {
-            grid.invaders.splice(i, 1)
-            Projectiles.splice(j, 1)
-
-            if (grid.invaders.length > 0) {
-              const firstInvader = grid.invaders[0]
-              const lastInvader = grid.invaders[grid.
-                invaders.length -1]
+            //weg halen invader en projectitle
+            if (invaderFound && ProjectileFound) {
+              grid.invaders.splice(i, 1)
+              Projectiles.splice(j, 1)
+               //invader die aan de zijkanten staan makkerlijker neer schieten
+              if (grid.invaders.length > 0) {
+                const firstInvader = grid.invaders[0]
+                const lastInvader = grid.invaders[grid.invaders.length - 1]
 
                 grid.width = lastInvader.position.x -
-                firstInvader.position.x + lastInvader.width
+                  firstInvader.position.x + lastInvader.width
                 grid.position.x = firstInvader.position
-            }  else{
-              grids.splice(gridIndex, 1)
-            }
+              } else {
+                grids.splice(gridIndex, 1)
               }
+            }
           }, 0)
-         }
+        }
       })
     })
   })
@@ -265,19 +276,19 @@ function animate() {
     player.velocity.x = -7;
     player.rotation = -0.15
     // als je op D druk dan ga je naar rechts
-  } else if (keys.d.pressed && player.position.x +player.width <= canvas.width) {
+  } else if (keys.d.pressed && player.position.x + player.width <= canvas.width) {
     player.velocity.x = 7
     player.rotation = 0.15
   } else {
     player.velocity.x = 0;
     player.rotation = 0
   }
-  
+
   //spwans de invaders in
   if (frames % randomInterval === 0) {
     grids.push(new Grid())
     randomInterval = Math.floor(Math.random() * 500 + 500)
-    frames = 0 
+    frames = 0
   }
 
   frames++
@@ -285,7 +296,9 @@ function animate() {
 }
 animate();
 
-addEventListener("keydown", ({ key }) => {
+addEventListener("keydown", ({
+  key
+}) => {
   switch (key) {
     case "a":
       keys.a.pressed = true;
@@ -303,13 +316,14 @@ addEventListener("keydown", ({ key }) => {
           x: 0,
           y: -10
         }
-      })
-      )
+      }))
       break;
   }
 });
 
-addEventListener("keyup", ({ key }) => {
+addEventListener("keyup", ({
+  key
+}) => {
   switch (key) {
     case "a":
       keys.a.pressed = false;
