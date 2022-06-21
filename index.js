@@ -91,7 +91,7 @@ class Projectile {
 
 
 class Particle {
-  constructor({ position, velocity, radius, color}) {
+  constructor({ position, velocity, radius, color, fades}) {
     this.position = position
     this.velocity = velocity
 
@@ -99,6 +99,8 @@ class Particle {
     this.color = color
     //de expsodie vervaagt
     this.opacity = 1
+    //laat de steren verdwijnen
+    this.fades = fades
   }
 
   draw() {
@@ -118,6 +120,7 @@ class Particle {
     this.position.x += this.velocity.x
     this.position.y += this.velocity.y
 
+    if (this.fades)
     this.opacity -= 0.0000001
   }
 }
@@ -286,9 +289,24 @@ const keys = {
 
 let frames = 0
 let randomInterval = Math.floor(Math.random() * 500 + 500)
+//achtergond aan maken
+for(let i = 0; i < 100; i++ ){
+  particles.push(new Particle({
+    position: {
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height
+    },
+    // explosie eefect
+    velocity: {
+      x: 0,
+      y: 0.5
+    },
+    radius: Math.random() * 2.5,
+    color: 'white'
+  }))}
 
 //laat speler explosie zien
-function createParticles({object, color}) {
+function createParticles({object, color, fades}) {
   for(let i = 0; i < 15; i++ ){
     particles.push(new Particle({
       position: {
@@ -301,7 +319,8 @@ function createParticles({object, color}) {
         y: (Math.random() -0.5) * 2
       },
       radius: Math.random() * 3,
-      color: color || '#BAA0DE'
+      color: color || '#BAA0DE',
+      fades
     }))}
 }
 
@@ -313,6 +332,12 @@ function animate() {
   c.fillRect(0, 0, canvas.width, canvas.height);
   player.update();
   particles.forEach((Particle, i) => {
+    if (Particle.position.y - Particle.radius >= canvas.height) {
+      Particle.position.x = Math.random() * canvas.width
+      Particle.position.y = -Particle.radius
+
+    }
+
     if(particles.opacity <= 0 ) {
       setTimeout(() => {
         particles.splice(i, 1)
@@ -343,7 +368,8 @@ function animate() {
         }, 0)
         createParticles({
           object: player,
-          color:  'white'
+          color:  'white',
+          fades: true
          })
       }
   })
@@ -397,6 +423,7 @@ function animate() {
             if (invaderFound && ProjectileFound) {
              createParticles({
               object: invader,
+              fades: true
              })
 
                 
