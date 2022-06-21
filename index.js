@@ -89,6 +89,34 @@ class Projectile {
   }
 }
 
+//begin InvaderProjectile
+class InvaderProjectile {
+  constructor({
+    position,
+    velocity
+  }) {
+    this.position = position
+    this.velocity = velocity
+
+
+    this.width = 3
+    this.height = 10
+  }
+
+  draw() {
+    c.fillStyle = 'white'
+    c.fillRect(this.position.x, this.position.y, this.width,
+      this.height)
+  }
+
+  update() {
+    this.draw()
+    this.position.x += this.velocity.x
+    this.position.y += this.velocity.y
+
+  }
+}
+
 class Invader {
   constructor({
     position
@@ -136,6 +164,22 @@ class Invader {
       this.position.y += velocity.y;
 
     }
+  }
+
+  //invader laten schieten
+  shoot(invaderProjectiles) {
+    invaderProjectiles.push(new InvaderProjectile({
+      position: {
+        x: this.position.x + this.width / 2,
+        y: this.position.y + this.width
+      },
+
+      velocity: {
+        x: 0,
+        y: 5
+      }
+
+    }))
   }
 }
 
@@ -191,6 +235,7 @@ class Grid {
 const player = new Player();
 const Projectiles = []
 const grids = []
+const invaderProjectiles = []
 
 const keys = {
   a: {
@@ -214,13 +259,33 @@ function animate() {
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
   player.update();
+  invaderProjectiles.forEach((invaderProjectile, index) => {
+    if (invaderProjectile.position.y + invaderProjectile.height >= canvas.height) {
+      setTimeout(() => {
+        invaderProjectiles.splice(index, 1)
+
+      }, 0)
+    } else invaderProjectile.update()
+// als een projectile de speler raakt dan stop  het spel
+    if (invaderProjectile.position.y + invaderProjectile.
+      height >=
+       player.position.y && invaderProjectile.position.x +
+       invaderProjectile.width >= player.position.x && 
+       invaderProjectile.position.x <= player.position.x +
+       player.width) {
+
+        console.log('you lose')
+      }
+  })
+
+
   Projectiles.forEach((Projectile, index) => {
 
     if (Projectile.position.y + Projectile.radius <= 0) {
       setTimeout(() => {
         Projectiles.splice(index, 1)
 
-      })
+      }, 0)
     } else {
       Projectile.update()
 
@@ -230,6 +295,12 @@ function animate() {
 
   grids.forEach((grid, gridIndex) => {
     grid.update()
+
+    //spawn projectiles
+    if (frames % 100 === 0 && grid.invaders.length > 0) {
+      grid.invaders[Math.floor(Math.random() * grid.invaders.length)].shoot(invaderProjectiles)
+    }
+
     grid.invaders.forEach((invader, i) => {
       invader.update({
         velocity: grid.velocity
@@ -253,7 +324,7 @@ function animate() {
             if (invaderFound && ProjectileFound) {
               grid.invaders.splice(i, 1)
               Projectiles.splice(j, 1)
-               //invader die aan de zijkanten staan makkerlijker neer schieten
+              //invader die aan de zijkanten staan makkerlijker neer schieten
               if (grid.invaders.length > 0) {
                 const firstInvader = grid.invaders[0]
                 const lastInvader = grid.invaders[grid.invaders.length - 1]
@@ -290,6 +361,8 @@ function animate() {
     randomInterval = Math.floor(Math.random() * 500 + 500)
     frames = 0
   }
+
+
 
   frames++
 
