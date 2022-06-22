@@ -13,6 +13,9 @@ class Player {
     };
 
     this.rotation = 0
+    this.opacity =1
+
+
     const image = new Image();
     image.src = "./img/spaceship.png";
     image.onload = () => {
@@ -30,6 +33,7 @@ class Player {
   draw() {
 
     c.save()
+    c.globalAlpha = this.opacity
     c.translate(
       player.position.x + player.width / 2,
       player.position.y + player.height / 2
@@ -121,7 +125,7 @@ class Particle {
     this.position.y += this.velocity.y
 
     if (this.fades)
-    this.opacity -= 0.0000001
+    this.opacity -= 0.001
   }
 }
 
@@ -234,8 +238,8 @@ class Grid {
 
     this.invaders = []
 
-    const columns = Math.floor(Math.random() * 10 + 5)
-    const rows = Math.floor(Math.random() * 5 + 2)
+    const columns = Math.floor(Math.random() * 12 + 8)
+    const rows = Math.floor(Math.random() * 1 + 3)
 
     this.width = columns * 30
 
@@ -288,7 +292,12 @@ const keys = {
 };
 
 let frames = 0
-let randomInterval = Math.floor(Math.random() * 500 + 500)
+let randomInterval = Math.floor(Math.random() * 900 + 1000)
+let game = {
+  over: false,
+  active: true
+}
+
 //achtergond aan maken
 for(let i = 0; i < 100; i++ ){
   particles.push(new Particle({
@@ -319,7 +328,7 @@ function createParticles({object, color, fades}) {
         y: (Math.random() -0.5) * 2
       },
       radius: Math.random() * 3,
-      color: color || '#BAA0DE',
+      color: color || 'yellow',
       fades
     }))}
 }
@@ -327,6 +336,7 @@ function createParticles({object, color, fades}) {
 
 
 function animate() {
+  if (!game.active) return
   requestAnimationFrame(animate);
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
@@ -365,7 +375,12 @@ function animate() {
        player.width) {
         setTimeout(() => {
           invaderProjectiles.splice(index, 1)
+          player.opacity = 0
+          game.over = true
         }, 0)
+        setTimeout(() => {
+         game.active = false
+        },2000)
         createParticles({
           object: player,
           color:  'white',
@@ -436,7 +451,7 @@ function animate() {
 
                 grid.width = lastInvader.position.x -
                   firstInvader.position.x + lastInvader.width
-                grid.position.x = firstInvader.position
+                grid.position.x = firstInvader.position.x
               } else {
                 grids.splice(gridIndex, 1)
               }
@@ -474,9 +489,9 @@ function animate() {
 }
 animate();
 
-addEventListener("keydown", ({
-  key
-}) => {
+addEventListener("keydown", ({ key }) => {
+  if (game.over) return
+
   switch (key) {
     case "a":
       keys.a.pressed = true;
