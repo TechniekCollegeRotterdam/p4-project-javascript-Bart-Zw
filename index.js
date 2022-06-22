@@ -1,3 +1,4 @@
+const scoreEL = document.querySelector('#scoreEL')
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
@@ -298,6 +299,8 @@ let game = {
   active: true
 }
 
+let score = 0
+
 //achtergond aan maken
 for(let i = 0; i < 100; i++ ){
   particles.push(new Particle({
@@ -316,7 +319,7 @@ for(let i = 0; i < 100; i++ ){
 
 //laat speler explosie zien
 function createParticles({object, color, fades}) {
-  for(let i = 0; i < 15; i++ ){
+  for(let i = 0; i < 5; i++ ){
     particles.push(new Particle({
       position: {
         x: object.position.x + object.width / 2,
@@ -324,8 +327,8 @@ function createParticles({object, color, fades}) {
       },
       // explosie eefect
       velocity: {
-        x: (Math.random() -0.5) * 2,
-        y: (Math.random() -0.5) * 2
+        x: (Math.random() -0.5) * 10,
+        y: (Math.random() -0.5) * 10
       },
       radius: Math.random() * 3,
       color: color || 'yellow',
@@ -436,6 +439,10 @@ function animate() {
 
             //weg halen invader en projectitle
             if (invaderFound && ProjectileFound) {
+              score += 100
+              scoreEL.innerHTML = score
+
+
              createParticles({
               object: invader,
               fades: true
