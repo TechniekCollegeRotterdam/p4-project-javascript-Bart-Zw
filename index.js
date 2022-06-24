@@ -17,7 +17,7 @@ class Player {
     };
 
     this.rotation = 0
-    this.opacity =10
+    this.opacity = 10
 
 
     const image = new Image();
@@ -99,7 +99,13 @@ class Projectile {
 
 
 class Particle {
-  constructor({ position, velocity, radius, color, fades}) {
+  constructor({
+    position,
+    velocity,
+    radius,
+    color,
+    fades
+  }) {
     this.position = position
     this.velocity = velocity
 
@@ -129,7 +135,7 @@ class Particle {
     this.position.y += this.velocity.y
 
     if (this.fades)
-    this.opacity -= 10
+      this.opacity -= 10
   }
 }
 
@@ -305,7 +311,7 @@ let game = {
 let score = 0
 
 //achtergond aan maken
-for(let i = 0; i < 100; i++ ){
+for (let i = 0; i < 100; i++) {
   particles.push(new Particle({
     position: {
       x: Math.random() * canvas.width,
@@ -318,11 +324,16 @@ for(let i = 0; i < 100; i++ ){
     },
     radius: Math.random() * 2.5,
     color: 'white'
-  }))}
+  }))
+}
 
 //laat speler explosie zien
-function createParticles({object, color, fades}) {
-  for(let i = 0; i < 5; i++ ){
+function createParticles({
+  object,
+  color,
+  fades
+}) {
+  for (let i = 0; i < 5; i++) {
     particles.push(new Particle({
       position: {
         x: object.position.x + object.width / 2,
@@ -330,13 +341,14 @@ function createParticles({object, color, fades}) {
       },
       // explosie eefect
       velocity: {
-        x: (Math.random() -0.5) * 10,
-        y: (Math.random() -0.5) * 10
+        x: (Math.random() - 0.5) * 10,
+        y: (Math.random() - 0.5) * 10
       },
       radius: Math.random() * 3,
       color: color || 'orange',
       fades
-    }))}
+    }))
+  }
 }
 
 
@@ -354,7 +366,7 @@ function animate() {
 
     }
 
-    if(particles.opacity <= 0 ) {
+    if (particles.opacity <= 0) {
       setTimeout(() => {
         particles.splice(i, 1)
 
@@ -372,27 +384,26 @@ function animate() {
 
       }, 0)
     } else invaderProjectile.update()
-// als een projectile de speler raakt dan stop  het spel
-    if (invaderProjectile.position.y + invaderProjectile.
-      height >=
-       player.position.y && invaderProjectile.position.x +
-       invaderProjectile.width >= player.position.x && 
-       invaderProjectile.position.x <= player.position.x +
-       player.width) {
-        setTimeout(() => {
-          invaderProjectiles.splice(index, 1)
-          player.opacity = 0
-          game.over = true
-        }, 0)
-        setTimeout(() => {
-         game.active = false
-        },2000)
-        createParticles({
-          object: player,
-          color:  'white',
-          fades: true
-         })
-      }
+    // als een projectile de speler raakt dan stop  het spel
+    if (invaderProjectile.position.y + invaderProjectile.height >=
+      player.position.y && invaderProjectile.position.x +
+      invaderProjectile.width >= player.position.x &&
+      invaderProjectile.position.x <= player.position.x +
+      player.width) {
+      setTimeout(() => {
+        invaderProjectiles.splice(index, 1)
+        player.opacity = 0
+        game.over = true
+      }, 0)
+      setTimeout(() => {
+        game.active = false
+      }, 2000)
+      createParticles({
+        object: player,
+        color: 'white',
+        fades: true
+      })
+    }
   })
 
 
@@ -433,7 +444,7 @@ function animate() {
           Projectile.position.y + Projectile.radius >= invader.position.y
         ) {
 
-         
+
 
           setTimeout(() => {
             const invaderFound = grid.invaders.find((invader2) => invader2 === invader)
@@ -446,12 +457,12 @@ function animate() {
               scoreEL.innerHTML = score
 
 
-             createParticles({
-              object: invader,
-              fades: true
-             })
+              createParticles({
+                object: invader,
+                fades: true
+              })
 
-                
+
               grid.invaders.splice(i, 1)
               Projectiles.splice(j, 1)
               //invader die aan de zijkanten staan makkerlijker neer schieten
@@ -500,10 +511,12 @@ function animate() {
 
 animate();
 
-addEventListener("keydown", ({ key }) => {
+addEventListener("keydown", ({
+  key
+}) => {
   audio.play();
   if (game.over) return
-  
+
 
   switch (key) {
     case "a":
@@ -541,4 +554,3 @@ addEventListener("keyup", ({
       break;
   }
 });
-
