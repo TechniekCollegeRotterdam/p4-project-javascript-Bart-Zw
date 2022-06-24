@@ -97,7 +97,7 @@ class Projectile {
   }
 }
 
-
+// begin van de class Particle
 class Particle {
   constructor({
     position,
