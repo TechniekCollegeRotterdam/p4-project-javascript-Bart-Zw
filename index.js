@@ -1,9 +1,12 @@
 const scoreEL = document.querySelector('#scoreEL')
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
+const audio = new Audio("starwars.mp3");
 
 canvas.width = 1024
 canvas.height = 576
+
+
 
 //begin class speler
 class Player {
@@ -126,7 +129,7 @@ class Particle {
     this.position.y += this.velocity.y
 
     if (this.fades)
-    this.opacity -= 0.001
+    this.opacity -= 10
   }
 }
 
@@ -145,7 +148,7 @@ class InvaderProjectile {
   }
 
   draw() {
-    c.fillStyle = 'white'
+    c.fillStyle = '#72f542'
     c.fillRect(this.position.x, this.position.y, this.width,
       this.height)
   }
@@ -331,7 +334,7 @@ function createParticles({object, color, fades}) {
         y: (Math.random() -0.5) * 10
       },
       radius: Math.random() * 3,
-      color: color || 'yellow',
+      color: color || 'orange',
       fades
     }))}
 }
@@ -494,10 +497,13 @@ function animate() {
   frames++
 
 }
+
 animate();
 
 addEventListener("keydown", ({ key }) => {
+  audio.play();
   if (game.over) return
+  
 
   switch (key) {
     case "a":
@@ -535,3 +541,4 @@ addEventListener("keyup", ({
       break;
   }
 });
+
