@@ -2,6 +2,7 @@ const scoreEL = document.querySelector('#scoreEL')
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 const audio = new Audio("starwars.mp3");
+const audio2 = new Audio("xwingfire.mp3")
 
 canvas.width = 1024
 canvas.height = 576
@@ -526,6 +527,7 @@ addEventListener("keydown", ({
       keys.d.pressed = true;
       break;
     case " ":
+      audio2.play();
       Projectiles.push(new Projectile({
         position: {
           x: player.position.x + player.width / 2,
