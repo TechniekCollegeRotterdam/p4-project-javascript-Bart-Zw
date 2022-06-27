@@ -9,7 +9,7 @@ canvas.height = 576
 
 
 
-//begin class speler
+// begin van instellingen speler
 class Player {
   constructor() {
     this.velocity = {
@@ -68,7 +68,7 @@ class Player {
     }
   }
 }
-//begin class Projectile
+// begin van instellingen Projectile
 class Projectile {
   constructor({
     position,
@@ -98,7 +98,7 @@ class Projectile {
   }
 }
 
-// begin van de class Particle
+//  begin van instellingen Particle
 class Particle {
   constructor({
     position,
@@ -140,7 +140,7 @@ class Particle {
   }
 }
 
-//begin InvaderProjectile
+// begin van instellingen InvaderProjectile
 class InvaderProjectile {
   constructor({
     position,
@@ -167,7 +167,7 @@ class InvaderProjectile {
 
   }
 }
-
+// begin van instellingen invader
 class Invader {
   constructor({
     position
@@ -234,7 +234,7 @@ class Invader {
   }
 }
 
-//begin class Grid
+// begin van instellingen Grid
 class Grid {
   constructor() {
     this.position = {
@@ -318,7 +318,7 @@ for (let i = 0; i < 100; i++) {
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height
     },
-    // explosie eefect
+    // explosie efect
     velocity: {
       x: 0,
       y: 0.5
