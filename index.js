@@ -1,6 +1,6 @@
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
-
+// moeten meer comments in komen
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
@@ -54,7 +54,7 @@ const keys = {
     pressed: false,
   },
 };
-
+// ik zou een andere kleur gebruiken voor de buitenste canvas
 function animate() {
   requestAnimationFrame(animate);
   c.fillStyle = "black";
@@ -71,7 +71,7 @@ function animate() {
   }
 }
 animate();
-
+// ik zou gaan checken of dingen werken met console.log
 addEventListener("keydown", ({ key }) => {
   switch (key) {
     case "a":
